@@ -1,9 +1,15 @@
-# Clears content of all log files 
+# Clears contents of all subreddits(collections) in database
+import pymongo
+from pymongo import MongoClient 
 
-import os
+database = "redditmon"
 
-dirname = "logs"
+client = MongoClient()
+db = client[database]
 
-for filename in os.listdir(dirname):
-	f = open(dirname+"/"+filename,'w')
-	f.close()
+collections = filter(lambda x: x != "system.indexes", map(str,db.collection_names()))
+
+for collection in collections:
+	print "removing %s..." % collection
+	db[collection].remove()
+	
