@@ -2,6 +2,8 @@ import datetime
 import time
 import urllib2
 import json
+import pymongo
+from pymongo import MongoClient
 from threading import Thread
 from decorators import retry
 
@@ -10,43 +12,52 @@ class MonitorThread(Thread):
 		self.stopped = False
 		self.delay = delay
 		self.action = action
-		Thread.__init__(self)
-	
+		Thread.__init__(self)	
 	def run(self):
 		while not self.stopped:
 			self.action()
 			time.sleep(self.delay)
 
+# Get the list of subreddits from file
 def get_queue():
 	f = open("subreddits.in")
 	lines = f.readlines()
 	f.close()
 	return map(lambda s: s.strip('\n'),lines)
 
-def log(path,string):
-	with open(path,"a") as f:
-		f.write(string+"\n")
+# Logs the results into the appropriate MongoDB collection
+def log(database,collection,document):
+	client = MongoClient()
+	db = client[database]
+	subreddit = db[collection]
+	subreddit.insert(document)
 
-def get_numbers(subreddit):
+# Request data from API and create a dictionary with the values
+def create_doc(subreddit):
+	# Inner function for doing requests
 	@retry(urllib2.URLError, tries=4,delay=5,backoff=2)
 	def get_data():
 		hdr = {'User-Agent':'Sub-reddit checker bot by /u/aymanf'}	
 		request = urllib2.Request("http://www.reddit.com/r/"+subreddit+"/about.json",headers = hdr)
 		raw = urllib2.urlopen(request)
-		
 		return raw
 	
 	data = json.load(get_data())
-	return ";".join(map(str,[datetime.datetime.now().strftime("%Y-%m-%d %H:%M"), data[u'data'][u'subscribers'], data[u'data'][u'accounts_active']]))
-
+	
+	return {
+		'time': datetime.datetime.now(),
+		'subscribers': data[u'data'][u'subscribers'],
+		'readers': data[u'data']['accounts_active']
+	} 
+	
 queue = get_queue()
 
 def process_queue():
 	for sub in queue:
-		data = get_numbers(sub)
-		log("logs/"+sub+".out",data)
+		log('redditmon',sub,create_doc(sub))
 		print sub
 		time.sleep(10)
 
+# Create a thread with sleep delay of 10 minutes
 process = MonitorThread(600,process_queue)
 process.start()
