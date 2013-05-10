@@ -1,11 +1,11 @@
-import datetime
-import time
 import urllib2
 import json
 import pymongo
 from pymongo import MongoClient
 from threading import Thread
 from decorators import retry
+import time
+from datetime import datetime
 
 class MonitorThread(Thread):
 	def __init__(self,delay,action):
@@ -45,7 +45,7 @@ def create_doc(subreddit):
 	data = json.load(get_data())
 	
 	return {
-		'time': datetime.datetime.now(),
+		'time': datetime.now().replace(second=0,microsecond=0),
 		'subscribers': data[u'data'][u'subscribers'],
 		'readers': data[u'data']['accounts_active']
 	} 
