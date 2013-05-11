@@ -3,9 +3,13 @@
 <div class="span3">
 	<div class="well">
 		<div class="btn-group">
-			<button class="btn btn-large dropdown-toggle" data-toggle="dropdown">Select a Subreddit <span class="caret"></span></button>
-			<ul class="dropdown-menu">
-				<li><a href="#">ddddd</a></li>  
+			<button id="subreddit" class="btn btn-large dropdown-toggle" data-toggle="dropdown" data-value="none">
+				<span class="txt">Select a Subreddit</span> <span class="caret"></span>
+			</button>
+			<ul id="subreddit_select" class="dropdown-menu">
+				{% for subreddit in subreddits %}
+					<li><a data-value="{{ subreddit }}">{{ subreddit | capitalize}}</a></li>
+				{% endfor %}
 			</ul>
 		</div>
 	</div>
