@@ -2,6 +2,7 @@ from flask import Flask, request, render_template, Response
 import dbutil
 from datetime import datetime
 import json 
+import validate
 
 # Configuration
 DEBUG = True
@@ -25,7 +26,7 @@ def get_logs():
 	# Default reply
 	reply = '{"status":"fail","data":"Invalid parameters"}'
 
-	if subreddit != None and start != None and end != None:
+	if None not in (subreddit, start, end) and validate.date(start) and validate.date(end):
 		if start == end:
 			resultset = dbutil.get_log_single(subreddit,datetime.strptime(start, '%Y-%m-%d'))
 		else:
