@@ -4,14 +4,22 @@ $(".datepicker").datepicker({autoclose:true});
 
 /* Combo box select change */
 $("#subreddit_select a").on('click',function(event){
+	/* Set value of the combo */
 	$("#subreddit .txt").text($(this).text());
 	$("#subreddit").data("value", $(this).data("value"));
+
+	/* Enable other fields */
+	$("#date_from,#date_to").attr("disabled",false);
+	$("#fetchLogs").removeClass("disabled");
 });
 
 $('#fetchLogs').on('click',function(event){
-	getLogs("programming","2013-05-06","2013-05-06",this,function(logs){
-		console.log(logs);
-	});
+	if(!$(this).hasClass("disabled"))
+	{
+		getLogs("programming","2013-05-06","2013-05-06",this,function(logs){
+			console.log(logs);
+		});
+	}
 });
 
 /* Requests log data via ajax and returns a list of json objects on success */
