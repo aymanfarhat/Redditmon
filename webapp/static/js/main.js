@@ -1,22 +1,33 @@
 /* Main JS file */
 
-$(".datepicker").datepicker({autoclose:true});
+$(".datepicker").datepicker({autoclose:true,format:"DD MM dd, yyyy"})
+.on('changeDate',function(e){
+	/* Set value for date compatible with the format to be received */
+	var val = ""+e.date.getFullYear()+"-"+(e.date.getMonth()+1)+"-"+e.date.getDate();
+	$(this).attr("data-val",val);
+});
 
 /* Combo box select change */
 $("#subreddit_select a").on('click',function(event){
 	/* Set value of the combo */
 	$("#subreddit .txt").text($(this).text());
-	$("#subreddit").data("value", $(this).data("value"));
+	
+	$("#subreddit").attr("data-val", $(this).data("value"));
 
 	/* Enable other fields */
 	$("#date_from,#date_to").attr("disabled",false);
 	$("#fetchLogs").removeClass("disabled");
 });
 
+/* Catch request submission action and call the approriate function */
 $('#fetchLogs').on('click',function(event){
 	if(!$(this).hasClass("disabled"))
 	{
-		getLogs("programming","2013-05-06","2013-05-06",this,function(logs){
+		var subreddit = $('#subreddit').attr('data-val');
+		var start = $('#date_from').attr('data-val');
+		var end = $('#date_to').attr('data-val');
+
+		getLogs(subreddit,start,end,this,function(logs){
 			console.log(logs);
 		});
 	}
@@ -26,7 +37,6 @@ $('#fetchLogs').on('click',function(event){
 function getLogs(subreddit,start,end,btn,succ_callback)
 {
 	var btn_id = btn.id;
-	
 	var request = $.ajax({
 		type: "GET",
 		url: window.location.origin+"/logs",
