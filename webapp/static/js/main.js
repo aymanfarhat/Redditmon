@@ -1,5 +1,11 @@
 /* Main JS file */
 
+/* About modal window on page load */
+$(window).load(function(){
+	$("#aboutModal").modal("show");
+});
+
+/* Initialize DatePicker settings */
 $(".datepicker").datepicker({autoclose:true,format:"DD MM dd, yyyy"})
 .on('changeDate',function(e){
 	/* Set value for date compatible with the format to be received */
@@ -28,7 +34,10 @@ $('#fetchLogs').on('click',function(event){
 		var end = $('#date_to').attr('data-val');
 
 		getLogs(subreddit,start,end,this,function(logs){
-			console.log(logs);
+			if(logs.length > 0)
+				console.log(logs);
+			else
+				notifyMsg("No results","The interval you specified didn't return any results for the chosen subreddit.");				
 		});
 	}
 });
@@ -57,9 +66,9 @@ function getLogs(subreddit,start,end,btn,succ_callback)
 			succ_callback(obj_arr);
 		}	
 		else if(reply.status === "fail")
-			notifyMsg(reply.data);
+			notifyMsg("Oops",reply.data);
 		else
-			notifyMsg("An unexpected problem has occurred, recheck your input and try again.");
+			notifyMsg("Oops","An unexpected problem has occurred, recheck your input and try again.");
 	});
 
 	request.fail(function(jqXHR,textStatus){
@@ -73,7 +82,9 @@ function getLogs(subreddit,start,end,btn,succ_callback)
 }
 
 /* Displays messages in a modal window */
-function notifyMsg(str)
+function notifyMsg(title,body)
 {
-	alert(str);
+	$("#msgModal #title").text(title);
+	$("#msgModal #msg").text(body);
+	$("#msgModal").modal("show");
 }

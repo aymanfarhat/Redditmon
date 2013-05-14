@@ -18,7 +18,8 @@
             <span class="icon-bar"></span>
           </button>
           <a class="brand" href="#">Redditmon</a>
-            <ul class="nav">
+            <ul class="nav pull-right">
+				<li><a href="#aboutModal" data-toggle="modal"><i class="icon-white icon-info-sign"></i> About</a></li>
             </ul>
 		</div>
         </div>
@@ -30,9 +31,37 @@
       </div>
       <hr>
       <footer>
-        <p>&copy; Redditmon</p>
+        <p>&copy; 2013 Ayman Farhat - Fork this project on <a href="https://github.com/aymanfarhat/Redditmon" target="_blank">Github</a></p>
       </footer>
     </div>
+	<div id="aboutModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="aboutModal" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="title">About Redditmon</h3>
+		</div>
+		<div class="modal-body">
+			<h3>Monitor Reddit reader trends</h3>
+			<p>Redditmon enables you to find the best time for sharing your links on Reddit based on sub-reddit readership analytics.
+			Select a subreddit from the left combo to get started!
+			</p>
+		</div>
+		<div class="modal-footer">
+			<label class="checkbox pull-left"><input type="checkbox"> Don't show me this dialog in future visits.</label>		
+			<button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Okay</button>
+		</div>
+	</div>
+	<div id="msgModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="msgModal" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="title"></h3>
+		</div>
+		<div class="modal-body">
+			<p id="msg"></p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Okay</button>
+		</div>
+	</div>
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
 	<script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>		

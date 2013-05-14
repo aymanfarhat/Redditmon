@@ -24,7 +24,7 @@ def get_logs():
 	end = request.args.get('end', None)
 	
 	# Default reply
-	reply = '{"status":"fail","data":"Invalid parameters"}'
+	reply = '{"status":"fail","data":"The parameters or values you submitted are invalid, please recheck your input."}'
 
 	if validate.nonempty_list_vals([subreddit,start,end]) and validate.date(start) and validate.date(end):
 		if start == end:
