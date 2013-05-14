@@ -26,7 +26,7 @@ def get_logs():
 	# Default reply
 	reply = '{"status":"fail","data":"Invalid parameters"}'
 
-	if None not in (subreddit, start, end) and validate.date(start) and validate.date(end):
+	if validate.nonempty_list_vals([subreddit,start,end]) and validate.date(start) and validate.date(end):
 		if start == end:
 			resultset = dbutil.get_log_single(subreddit,datetime.strptime(start, '%Y-%m-%d'))
 		else:
