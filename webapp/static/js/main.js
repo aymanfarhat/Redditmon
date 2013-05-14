@@ -5,13 +5,18 @@ $(window).load(function(){
 	$("#aboutModal").modal("show");
 });
 
+var dp = $(".datepicker");
+
 /* Initialize DatePicker settings */
-$(".datepicker").datepicker({autoclose:true,format:"DD MM dd, yyyy"})
+dp.datepicker({autoclose:true,format:"DD MM dd, yyyy"})
 .on('changeDate',function(e){
 	/* Set value for date compatible with the format to be received */
-	var val = ""+e.date.getFullYear()+"-"+(e.date.getMonth()+1)+"-"+e.date.getDate();
-	$(this).attr("data-val",val);
+	$(this).attr("data-val",dateToVal(e.date));
 });
+
+/* Default date field values(today) */
+dp.datepicker("setValue");
+dp.attr("data-val",dateToVal(new Date()));
 
 /* Combo box select change */
 $("#subreddit_select a").on('click',function(event){
@@ -66,9 +71,9 @@ function getLogs(subreddit,start,end,btn,succ_callback)
 			succ_callback(obj_arr);
 		}	
 		else if(reply.status === "fail")
-			notifyMsg("Oops",reply.data);
+			notifyMsg("Oh snap!",reply.data);
 		else
-			notifyMsg("Oops","An unexpected problem has occurred, recheck your input and try again.");
+			notifyMsg("Oh snap!","An unexpected problem has occurred, recheck your input and try again.");
 	});
 
 	request.fail(function(jqXHR,textStatus){
@@ -87,4 +92,10 @@ function notifyMsg(title,body)
 	$("#msgModal #title").text(title);
 	$("#msgModal #msg").text(body);
 	$("#msgModal").modal("show");
+}
+
+/* Format date object to desired value format*/
+function dateToVal(dt)
+{
+	return ""+dt.getFullYear()+"-"+(dt.getMonth()+1)+"-"+dt.getDate();
 }
