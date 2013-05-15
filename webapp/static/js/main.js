@@ -2,7 +2,10 @@
 
 /* About modal window on page load */
 $(window).load(function(){
-	$("#aboutModal").modal("show");
+	if (!(Modernizr.localstorage && localStorage.getItem('noAboutOnStart') === "1"))
+		$("#aboutModal").modal("show");
+	else
+		$('#noShowAboutDiag').prop('checked',true);
 });
 
 var dp = $(".datepicker");
@@ -44,6 +47,15 @@ $('#fetchLogs').on('click',function(event){
 			else
 				notifyMsg("No results","The interval you specified didn't return any results for the chosen subreddit.");				
 		});
+	}
+});
+
+/* About dialog checkbox clicked */
+$('#noShowAboutDiag').on('click',function(event){
+	if(Modernizr.localstorage)
+	{
+		var val = ($(this).is(":checked"))?"1":"0";
+		localStorage.setItem('noAboutOnStart',val)	
 	}
 });
 
