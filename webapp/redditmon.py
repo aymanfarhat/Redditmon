@@ -31,7 +31,7 @@ def get_logs():
 			resultset = dbutil.get_log_single(subreddit,datetime.strptime(start, '%Y-%m-%d'))
 		else:
 			resultset = dbutil.get_log_range(subreddit,datetime.strptime(start,'%Y-%m-%d'),datetime.strptime(end,'%Y-%m-%d'))
-		reply = '{"status":"success","data":{"logs":'+resultset+'}}'
+		reply = '{"status":"success","data":{"start":"'+start+'","end":"'+end+'","logs":'+resultset+'}}'
 	
 	return Response(reply,status=200,mimetype='application/json')
 
