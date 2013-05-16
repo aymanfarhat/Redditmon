@@ -8,20 +8,18 @@ $(window).load(function(){
 		$('#noShowAboutDiag').prop('checked',true);
 });
 
-
-
 var dp = $(".datepicker");
 
 /* Initialize DatePicker settings */
 dp.datepicker({autoclose:true,format:"DD MM dd, yyyy"})
 .on('changeDate',function(e){
 	/* Set value for date compatible with the format to be received */
-	$(this).attr("data-val",dateToVal(e.date));
+	$(this).attr("data-val",moment(e.date).format("YYYY-MM-DD"));
 });
 
 /* Default date field values(today) */
 dp.datepicker("setValue");
-dp.attr("data-val",dateToVal(new Date()));
+dp.attr("data-val",moment(new Date()).format("YYYY-MM-DD"));
 
 /* Combo box select change */
 $("#subreddit_select a").on('click',function(event){
@@ -115,8 +113,9 @@ function plotchart(logs)
 	var subscribers = [];
 	
 	_.each(logs,function(log,i){
-		readers.push([moment.utc(log.time,"YYYY-MM-DD HH:mm Z"),log.readers]);
+		readers.push([moment.utc(log.time,"YYYY-MM-DD HH:mm"),log.readers]);
 	});
+
 	console.log(readers);
 	var stuff = [
 	{
@@ -134,17 +133,4 @@ function plotchart(logs)
 	};
 	
 	$.plot("#placeholder",stuff,options);
-}
-
-function extractTime(strDate)
-{
-	var time = strDate.split("T")[1];
-	var t_arr = time.split(":");
-	return t_arr[0]+":"+t_arr[1];
-}
-
-/* Format date object to desired value format*/
-function dateToVal(dt)
-{
-	return ""+dt.getFullYear()+"-"+(dt.getMonth()+1)+"-"+dt.getDate();
 }
