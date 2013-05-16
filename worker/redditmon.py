@@ -45,7 +45,7 @@ def create_doc(subreddit):
 	data = json.load(get_data())
 	
 	return {
-		'time': datetime.now().replace(second=0,microsecond=0),
+		'time': datetime.utcnow().replace(second=0,microsecond=0),
 		'subscribers': data[u'data'][u'subscribers'],
 		'readers': data[u'data']['accounts_active']
 	} 
