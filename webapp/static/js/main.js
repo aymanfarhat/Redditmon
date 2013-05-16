@@ -8,6 +8,8 @@ $(window).load(function(){
 		$('#noShowAboutDiag').prop('checked',true);
 });
 
+
+
 var dp = $(".datepicker");
 
 /* Initialize DatePicker settings */
@@ -43,7 +45,7 @@ $('#fetchLogs').on('click',function(event){
 
 		getLogs(subreddit,start,end,this,function(logs){
 			if(logs.length > 0)
-				console.log(logs);
+				plotchart(logs);
 			else
 				notifyMsg("No results","The interval you specified didn't return any results for the chosen subreddit.");				
 		});
@@ -104,6 +106,41 @@ function notifyMsg(title,body)
 	$("#msgModal #title").text(title);
 	$("#msgModal #msg").text(body);
 	$("#msgModal").modal("show");
+}
+
+/* Plots a new FlotChart Graph with the data */
+function plotchart(logs)
+{
+	var readers = [];
+	var subscribers = [];
+	
+	_.each(logs,function(log,i){
+		readers.push([moment.utc(log.time,"YYYY-MM-DD HH:mm Z"),log.readers]);
+	});
+	console.log(readers);
+	var stuff = [
+	{
+		data: readers,
+		color: '#FFAA42',
+		label:'Readers',
+		lines:{show:true},
+		points:{show:true}
+	},
+	];
+
+	var options = {
+		xaxis: { mode: "time",
+		}
+	};
+	
+	$.plot("#placeholder",stuff,options);
+}
+
+function extractTime(strDate)
+{
+	var time = strDate.split("T")[1];
+	var t_arr = time.split(":");
+	return t_arr[0]+":"+t_arr[1];
 }
 
 /* Format date object to desired value format*/
