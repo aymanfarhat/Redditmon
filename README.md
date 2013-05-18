@@ -7,7 +7,7 @@ A tool for monitoring and storing number of readers on subreddit, and a simple w
 A Python module that runs as a service on a server and fetches the data related to the selected subreddits every interval of time and writes to the database.
 
 ### Webapp
-A single page application with Python's Flask as a back end and KnockoutJS on the client. Fetchs the data from database based on a query and displays it on a chart.
+A single page application with Python's Flask as a back-end and modular javascript for the front-end, along with using jQuery and Underscore. Fetches the data from database based on a form query and displays results on a chart with detail view for points.
 
 Setup
 ------
