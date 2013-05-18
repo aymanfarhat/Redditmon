@@ -70,6 +70,15 @@
 	<script type="text/javascript" charset="utf-8" src="http://cdnjs.cloudflare.com/ajax/libs/flot/0.8/jquery.flot.min.js"></script>
 	<script type="text/javascript" charset="utf-8" src="static/js/jquery.flot.time.js"></script>
 	<script type="text/javascript" charset="utf-8" src="static/js/bootstrap-datepicker.js"></script>
-	<script type="text/javascript" charset="utf-8" src="static/js/main.js"></script>
+	<script type="text/javascript" charset="utf-8" src="static/js/modules/ui.js"></script>
+	<script type="text/javascript" charset="utf-8" src="static/js/modules/data.js"></script>
+	<script type="text/javascript" charset="utf-8" src="static/js/modules/plot.js"></script>
+	<script type="text/javascript" charset="utf-8">
+		(function(){
+			UIModule.init();
+			DataModule.init();
+			PlotModule.init();
+		})();
+	</script>
 	</body>
 </html>
