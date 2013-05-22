@@ -38,7 +38,7 @@ var PlotModule = (function(window,$)
 				var data = DataModule.datalogAt(item.dataIndex);
 				s.plotDetail.html(template({
 					utc:moment(data.time).format("MMMM Do YYYY, h:mm:ss a"),
-					local:moment(data.time).format("MMMM Do YYYY, h:mm:ss a"),
+					local:moment(data.time).add("minutes",moment().zone()*-1).format("MMMM Do YYYY, h:mm:ss a"),
 					readers:data.readers,
 					subs:data.subscribers
 				}));
@@ -52,7 +52,7 @@ var PlotModule = (function(window,$)
 	var plot = function(logs)
 	{
 		var readers = [];
-		console.log(logs);
+		
 		_.each(logs,function(log, i){
 			readers.push([moment.utc(log.time),log.readers]);
 		});
