@@ -3,8 +3,11 @@ var PlotModule = (function(window,$)
 {
 	var s = {
 		placeHolder:$("#placeholder"),
+		plotDetail:$("#plotdetail"),
+		detailLogTemplate:$("#detailLogTemp"),
+		plot:null
 	};
-
+	
 	var init = function()
 	{
 		BindUIActions();
@@ -16,37 +19,44 @@ var PlotModule = (function(window,$)
 		{
 			if(item) 
 			{
-				if (previousPoint != item.dataIndex) 
-				{
-					previousPoint = item.dataIndex;
-					
-					$("#tooltip").remove();
-
-					var x = item.datapoint[0],
-						y = item.datapoint[1];
-					
-					showTooltip(item.pageX, item.pageY,parseInt(y));
-				}
-			}
-			else {
 				$("#tooltip").remove();
-				previousPoint = null;            
+
+				var x = item.datapoint[0],
+					y = item.datapoint[1];
+					
+				showTooltip(item.pageX, item.pageY,parseInt(y));
 			}
+			else
+				$("#tooltip").remove();
 		});
 		
 		s.placeHolder.bind("plotclick",function(event, pos, item){
-			console.log("click event");	
+			if(item.dataIndex !==null)
+			{
+				var template = _.template(s.detailLogTemplate.html());
+				
+				var data = DataModule.datalogAt(item.dataIndex);
+				s.plotDetail.html(template({
+					utc:moment(data.time).format("MMMM Do YYYY, h:mm:ss a"),
+					local:moment(data.time).format("MMMM Do YYYY, h:mm:ss a"),
+					readers:data.readers,
+					subs:data.subscribers
+				}));
+
+				s.plot.unhighlight();
+				s.plot.highlight(item.series,item.datapoint);
+			}
 		});
 	};
 
 	var plot = function(logs)
 	{
 		var readers = [];
-		
+		console.log(logs);
 		_.each(logs,function(log, i){
-			readers.push([moment.utc(log.time,"YYYY-MM-DD HH:mm"),log.readers]);
+			readers.push([moment.utc(log.time),log.readers]);
 		});
-		
+
 		var settings = [{
 			data: readers,
 			color: '#FFAA42',
@@ -60,7 +70,7 @@ var PlotModule = (function(window,$)
 			grid:{hoverable:true,clickable:true}
 		};
 
-		$.plot(s.placeHolder,settings,options);
+		s.plot = $.plot(s.placeHolder,settings,options);
 
 		/*
 		Need to check later wether reader or subscriber selected
@@ -73,12 +83,11 @@ var PlotModule = (function(window,$)
        $('<div id="tooltip">'+contents+'</div>').css({
             'position': 'absolute',
             'display': 'none',
-            'top': y-30,
-            'left': x-30,
+            'top': y-32,
+            'left': x-20,
             'border': '1px solid #CCC',
             'padding': '2px',
             'background-color': '#FFF',
-            'opacity': 0.80,
 			'font-size':'20px'
         }).appendTo("body").fadeIn(200);
     }

@@ -1,5 +1,6 @@
 /* Module for managing requests and data manipulation */
-var DataModule = (function(window, $){
+var DataModule = (function(window, $)
+{
 	var s = {};
 	
 	/* Stores the results of the last successsful request */
@@ -49,9 +50,15 @@ var DataModule = (function(window, $){
 		}
 		return logCache.logs;
 	};
+	
+	var datalogAt = function(index)
+	{
+		return logCache.logs[index];
+	};
 
 	return {
 		init: init, 
 		requestLogs: requestLogs,
+		datalogAt: datalogAt
 	}
 })(window, jQuery);
