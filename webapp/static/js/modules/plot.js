@@ -37,8 +37,8 @@ var PlotModule = (function(window,$)
 				
 				var data = DataModule.datalogAt(item.dataIndex);
 				s.plotDetail.html(template({
-					utc:moment(data.time).format("MMMM Do YYYY, h:mm:ss a"),
-					local:moment(data.time).add("minutes",moment().zone()*-1).format("MMMM Do YYYY, h:mm:ss a"),
+					utc:moment(data.time).format("dddd MMMM D h:mm a"),
+					local:moment(data.time).add("minutes",moment().zone()*-1).format("dddd MMMM D h:mm a"),
 					readers:data.readers,
 					subs:data.subscribers
 				}));
