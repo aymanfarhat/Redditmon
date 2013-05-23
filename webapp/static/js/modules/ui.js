@@ -16,12 +16,14 @@ var UIModule = function(window,$)
 		fetchLogsBtn_icon: $("#fetchLogs i"),
 		fetchLogsBtn_text: $("#fetchLogs span"),
 		noAboutCheck: $('#noShowAboutDiag'),
+		categSwitch: $('#categswitch > button.btn'),
+		selectedCategSwitch: $("#categswitch button.active").text()
 	};
 	
 	var init = function()
 	{
 		var self = this;
-			
+	
 		bindUIActions();
 
 		/* Detect other modules */
@@ -67,15 +69,21 @@ var UIModule = function(window,$)
 				var start = s.date_from.attr('data-val');
 				var end = s.date_to.attr('data-val');
 				
-				var logs = s.dataModule.requestLogs(subreddit,start,end);
+				var logs = DataModule.requestLogs(subreddit,start,end);
 				
 				if(logs.length > 0)
-				{
 					s.plotModule.plot(logs);
-				}
 				else
 					msgBox("Oh snap!","No results were returned, review your input and try again.");	
 			}
+		});
+
+		s.categSwitch.on('click',function(event)
+		{
+			s.selectedCategSwitch = $(this).text();
+
+			if(DataModule.logCache.logs.length > 0)
+				PlotModule.plot(DataModule.logCache.logs);
 		});
 	};
 	
@@ -110,9 +118,12 @@ var UIModule = function(window,$)
 		s.msgModal.modal("show");
 	};
 	
+	var getSelectedSwitch = function(){ return s.selectedCategSwitch; }
+	
 	return { 
-		init:init,
-		msgBox:msgBox,
-		fetchLogsBtnLoading:fetchLogsBtnLoading,
+		init: init,
+		msgBox: msgBox,
+		fetchLogsBtnLoading: fetchLogsBtnLoading,
+		getSelectedSwitch: getSelectedSwitch,
 	};
 }(window,jQuery);

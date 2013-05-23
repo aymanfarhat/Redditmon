@@ -59,6 +59,7 @@ var DataModule = (function(window, $)
 	return {
 		init: init, 
 		requestLogs: requestLogs,
-		datalogAt: datalogAt
+		datalogAt: datalogAt,
+		logCache: logCache
 	}
 })(window, jQuery);

@@ -30,7 +30,8 @@ var PlotModule = (function(window,$)
 				$("#tooltip").remove();
 		});
 		
-		s.placeHolder.bind("plotclick",function(event, pos, item){
+		s.placeHolder.bind("plotclick",function(event, pos, item)
+		{
 			if(item.dataIndex !==null)
 			{
 				var template = _.template(s.detailLogTemplate.html());
@@ -51,31 +52,49 @@ var PlotModule = (function(window,$)
 
 	var plot = function(logs)
 	{
-		var readers = [];
-		
-		_.each(logs,function(log, i){
-			readers.push([moment.utc(log.time),log.readers]);
-		});
+		if(UIModule.getSelectedSwitch() == "Readers")
+		{
+			var readers = [];
+			
+			_.each(logs,function(log, i){
+				readers.push([moment.utc(log.time),log.readers]);
+			});
 
-		var settings = [{
-			data: readers,
-			color: '#FFAA42',
-			label:'Readers',
-			lines:{show:true},
-			points:{show:true},
-			}];
+			var settings = [{
+				data: readers,
+				color: '#FFAA42',
+				label:'Readers',
+				lines:{show:true},
+				points:{show:true},
+				}];
 
-		var options = {
-			xaxis: {mode:"time"},
-			grid:{hoverable:true,clickable:true}
-		};
+			var options = {
+				xaxis: {mode:"time"},
+				grid:{hoverable:true,clickable:true}
+			};
+		}
+		else
+		{
+			var subscribers = [];
+			
+			_.each(logs,function(log, i){
+				subscribers.push([moment.utc(log.time),log.subscribers]);
+			});
 
+			var settings = [{
+				data: subscribers,
+				color: '#DC143C',
+				label:'Subscribers',
+				lines:{show:true},
+				points:{show:true},
+				}];
+
+			var options = {
+				xaxis: {mode:"time"},
+				grid:{hoverable:true,clickable:true}
+			};
+		}
 		s.plot = $.plot(s.placeHolder,settings,options);
-
-		/*
-		Need to check later wether reader or subscriber selected
-		$("#categswitch > button.active").text());
-		*/
 	};
 
  	var showTooltip = function(x, y, contents) 
