@@ -38,9 +38,17 @@ var DataModule = (function(window, $)
             request.done(function(reply){
                 if(reply.status === "success")
                 {
-                    logCache.logs = _.map(reply.data.logs,function(str){
-                        return $.parseJSON(str);
+                    var logObjects = _.map(reply.data.logs,function(str){
+                        var logobj = $.parseJSON(str);
+                        return {
+                            readers: logobj.readers,
+                            subscribers: logobj.subscribers,
+                            time: logobj.time,
+                            day: logobj.time.split("T")[0]
+                        };
                     });
+
+                    logCache.logs = (from === to)?logObjects:reduceLogs(logObjects);
                 }
                 else
                     logCache.logs = [];
@@ -56,6 +64,42 @@ var DataModule = (function(window, $)
         return logCache.logs[index];
     };
 
+    /* Reduces the collection of logs into smaller one based by 
+     * merging repetitive date(day) data into single element */
+    var reduceLogs = function(logs)
+    {
+        var logDict = {};
+        
+        /* Merge logs into a dictionary of days */
+        _.each(logs,function(log){
+            if(typeof logDict[log.day] === "undefined")
+            {   logDict[log.day] = {
+                    time: log.day,
+                    readers: log.readers,
+                    subscribers: log.subscribers,
+                    count:1
+                };
+            }
+            else
+            {
+                logDict[log.day].readers += log.readers;
+                logDict[log.day].subscribers += log.subscribers;
+                logDict[log.day].count += 1;
+            }
+        });
+        
+        var newlogs = _.values(logDict);
+
+        /* Compute averages for each property */
+        return _.map(newlogs,function(log){
+            return {
+                time:log.time,
+                readers: Math.floor(log.readers/log.count),
+                subscribers: Math.floor(log.subscribers/log.count),
+            }; 
+        });
+    };
+    
     return {
         init: init, 
         requestLogs: requestLogs,

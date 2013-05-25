@@ -32,16 +32,36 @@ var PlotModule = (function(window,$)
         
         s.placeHolder.bind("plotclick",function(event, pos, item)
         {
-            if(item.dataIndex !==null)
+            if(item.dataIndex !== null)
             {
                 var template = _.template(s.detailLogTemplate.html());
-                
                 var data = DataModule.datalogAt(item.dataIndex);
+                
+                var datefrmt;
+                var readers_title;
+                var subs_title;
+                
+                if(UIModule.selectedDaysCount() == 1)
+                {                    
+                    datefrmt = "dddd MMMM D, h:mm a";
+                    readerstitle = "Readers";
+                    substitle = "Subscribers";
+                }
+                else
+                {
+                    datefrmt = "dddd MMMM D";
+                    readerstitle = "Average Readers";
+                    substitle = "Average Subscribers";
+
+                }
+
                 s.plotDetail.html(template({
-                    utc:moment(data.time).format("dddd MMMM D h:mm a"),
-                    local:moment(data.time).add("minutes",moment().zone()*-1).format("dddd MMMM D h:mm a"),
+                    utc:moment(data.time).format(datefrmt),
+                    local:moment(data.time).add("minutes",moment().zone()*-1).format(datefrmt),
                     readers:data.readers,
-                    subs:data.subscribers
+                    readers_title:readerstitle,
+                    subs:data.subscribers,
+                    subs_title:substitle
                 }));
 
                 s.plot.unhighlight();
@@ -49,11 +69,12 @@ var PlotModule = (function(window,$)
             }
         });
     };
-
+    /*
+     * We'll have 2 plot functions one for plotting single day logs 
+     * and another for multiple day logs 
+     * */
     var plot = function(logs)
     {
-        console.log(logs);
-
         var logdata = [];
 
         var options = {

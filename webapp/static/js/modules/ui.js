@@ -120,10 +120,20 @@ var UIModule = function(window,$)
     
     var getSelectedSwitch = function(){ return s.selectedCategSwitch; }
     
+    /* Gets the number of days selected in the date range */
+    var selectedDaysCount = function()
+    {
+        var start = moment(s.date_from.attr('data-val'));
+        var end = moment(s.date_to.attr('data-val'));
+        
+        return end.diff(start,'days') + 1;
+    }
+    
     return { 
         init: init,
         msgBox: msgBox,
         fetchLogsBtnLoading: fetchLogsBtnLoading,
         getSelectedSwitch: getSelectedSwitch,
+        selectedDaysCount: selectedDaysCount
     };
 }(window,jQuery);
