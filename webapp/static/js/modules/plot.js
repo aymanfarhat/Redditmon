@@ -52,7 +52,6 @@ var PlotModule = (function(window,$)
                     datefrmt = "dddd MMMM D";
                     readerstitle = "Average Readers";
                     substitle = "Average Subscribers";
-
                 }
 
                 s.plotDetail.html(template({

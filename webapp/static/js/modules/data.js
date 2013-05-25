@@ -18,6 +18,8 @@ var DataModule = (function(window, $)
 
     var requestLogs = function(subreddit,from,to)
     {
+        var logs = [];
+
         if(subreddit !== logCache.subreddit ||
         from !== logCache.from ||
         to !== logCache.to ||
@@ -36,7 +38,8 @@ var DataModule = (function(window, $)
             });
             
             request.done(function(reply){
-                if(reply.status === "success")
+                if(reply.status === "success" && 
+                    (typeof reply.data.logs !== "undefined" && reply.data.logs.length > 0))
                 {
                     var logObjects = _.map(reply.data.logs,function(str){
                         var logobj = $.parseJSON(str);
@@ -47,16 +50,16 @@ var DataModule = (function(window, $)
                             day: logobj.time.split("T")[0]
                         };
                     });
-
-                    logCache.logs = (from === to)?logObjects:reduceLogs(logObjects);
+                    logs = (from === to)?logObjects:reduceLogs(logObjects);
+                    logCache.logs = logs;
                 }
                 else
-                    logCache.logs = [];
+                    logCache.logs = (logCache.logs.length > 0)?logCache.logs:[];
             });
             
             request.always(s.uiModule.fetchLogsBtnLoading(false));
         }
-        return logCache.logs;
+        return logs;
     };
     
     var datalogAt = function(index)
