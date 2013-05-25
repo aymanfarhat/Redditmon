@@ -32,7 +32,7 @@ var PlotModule = (function(window,$)
         
         s.placeHolder.bind("plotclick",function(event, pos, item)
         {
-            if(item.dataIndex !== null)
+            if(item !== null)
             {
                 var template = _.template(s.detailLogTemplate.html());
                 var data = DataModule.datalogAt(item.dataIndex);
