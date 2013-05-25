@@ -52,47 +52,42 @@ var PlotModule = (function(window,$)
 
     var plot = function(logs)
     {
+        console.log(logs);
+
+        var logdata = [];
+
+        var options = {
+            xaxis: {mode:"time"},
+            grid:{hoverable:true,clickable:true}
+        };
+
         if(UIModule.getSelectedSwitch() == "Readers")
         {
-            var readers = [];
-            
             _.each(logs,function(log, i){
-                readers.push([moment.utc(log.time),log.readers]);
+                logdata.push([moment.utc(log.time),log.readers]);
             });
 
             var settings = [{
-                data: readers,
-                color: '#FFAA42',
+                data:logdata,
+                color:'#FFAA42',
                 label:'Readers',
                 lines:{show:true},
                 points:{show:true},
                 }];
-
-            var options = {
-                xaxis: {mode:"time"},
-                grid:{hoverable:true,clickable:true}
-            };
         }
         else
         {
-            var subscribers = [];
-            
             _.each(logs,function(log, i){
-                subscribers.push([moment.utc(log.time),log.subscribers]);
+                logdata.push([moment.utc(log.time),log.subscribers]);
             });
 
             var settings = [{
-                data: subscribers,
-                color: '#DC143C',
+                data:logdata,
+                color:'#DC143C',
                 label:'Subscribers',
                 lines:{show:true},
                 points:{show:true},
                 }];
-
-            var options = {
-                xaxis: {mode:"time"},
-                grid:{hoverable:true,clickable:true}
-            };
         }
         s.plot = $.plot(s.placeHolder,settings,options);
     };
