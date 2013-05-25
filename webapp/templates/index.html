@@ -1,51 +1,51 @@
 {% extends "base.html" %}
 {% block body %}
 <div class="span3">
-	<div class="well">
-		<div class="btn-group">
-			<button id="subreddit" class="btn btn-large dropdown-toggle" data-toggle="dropdown" data-value="none">
-				<span class="txt">Select a Subreddit</span> <span class="caret"></span>
-			</button>
-			<ul id="subreddit_select" class="dropdown-menu">
-				{% for subreddit in subreddits %}
-					<li><a data-value="{{ subreddit }}">{{ subreddit | capitalize}}</a></li>
-				{% endfor %}
-			</ul>
-		</div>
-	</div>
-	<div class="well">
-		<label>From</label>
-		<div class="input-prepend">
-			<span class="add-on"><i class="icon-calendar"></i></span>
-			<input id="date_from" type="text" class="datepicker" data-val="" disabled />
-		</div>
-		<label>To</label>
-		<div class="input-prepend">
-			<span class="add-on"><i class="icon-calendar"></i></span>
-			<input id="date_to" type="text" class="datepicker" data-val="" disabled />
-		</div>
-		<a id="fetchLogs" class="btn disabled"><i class="icon-refresh"></i> <span>Fetch</span></a>
-	</div>
-	<div class="well">
-		<div id="plotdetail">Click a point on the plot for details...</div>		
-	</div>
-	</div>
-	<div class="span9">
-		<div class="well">
-				<div id="categswitch" class="btn-group pull-right" data-toggle="buttons-radio">
-				  <button class="btn active">Readers</button>
-				  <button class="btn">Subscribers</button>
-				</div>
-			<div style="clear:both;"><div id="placeholder" class="demo-placeholder" style="width:100%;height:90%;"></div></div>
-		</div>
-	</div>
-	<script type="text/template" id="detailLogTemp">
-		<h5>Selected point details</h5>
-		<div style="line-height:28px;">
-			<i class="icon-time"></i> <strong>UTC</strong> <%=utc%><br />
-			<i class="icon-time"></i> <strong>Local</strong> <%=local%><br />
+    <div class="well">
+        <div class="btn-group">
+            <button id="subreddit" class="btn btn-large dropdown-toggle" data-toggle="dropdown" data-value="none">
+                <span class="txt">Select a Subreddit</span> <span class="caret"></span>
+            </button>
+            <ul id="subreddit_select" class="dropdown-menu">
+                {% for subreddit in subreddits %}
+                    <li><a data-value="{{ subreddit }}">{{ subreddit | capitalize}}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="well">
+        <label>From</label>
+        <div class="input-prepend">
+            <span class="add-on"><i class="icon-calendar"></i></span>
+            <input id="date_from" type="text" class="datepicker" data-val="" disabled />
+        </div>
+        <label>To</label>
+        <div class="input-prepend">
+            <span class="add-on"><i class="icon-calendar"></i></span>
+            <input id="date_to" type="text" class="datepicker" data-val="" disabled />
+        </div>
+        <a id="fetchLogs" class="btn disabled"><i class="icon-refresh"></i> <span>Fetch</span></a>
+    </div>
+    <div class="well">
+        <div id="plotdetail">Click a point on the plot for details...</div>     
+    </div>
+    </div>
+    <div class="span9">
+        <div class="well">
+                <div id="categswitch" class="btn-group pull-right" data-toggle="buttons-radio">
+                  <button class="btn active">Readers</button>
+                  <button class="btn">Subscribers</button>
+                </div>
+            <div style="clear:both;"><div id="placeholder" class="demo-placeholder" style="width:100%;height:90%;"></div></div>
+        </div>
+    </div>
+    <script type="text/template" id="detailLogTemp">
+        <h5>Selected point details</h5>
+        <div style="line-height:28px;">
+            <i class="icon-time"></i> <strong>UTC</strong> <%=utc%><br />
+            <i class="icon-time"></i> <strong>Local</strong> <%=local%><br />
             <i class="icon-user"></i> <strong><%=readers_title%></strong> <%=readers%><br />
             <i class="icon-bookmark"></i> <strong><%=subs_title%></strong> <%=subs%>
-		</div>
-	</script>
+        </div>
+    </script>
 {% endblock %}
