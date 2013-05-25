@@ -32,7 +32,7 @@ var DataModule = (function(window, $)
             var request = $.ajax({
                 type: "GET",
                 async:false,
-                url: window.location.origin+"/logs",
+                url: window.location.protocol+'//'+window.location.host+"/logs",
                 data: _.template("subreddit=<%=sub%>&start=<%=st%>&end=<%=en%>",{sub:subreddit,st:from,en:to}),
                 beforeSend: s.uiModule.fetchLogsBtnLoading(true),
             });
