@@ -57,7 +57,6 @@ var DataModule = (function(window, $)
                 {
                     logCache.logs = (logCache.logs.length > 0)?logCache.logs:[];
                     UIModule.msgBox("Oh snap!","No results were returned, review your input and try again.");
-                    logs_projection
                 }
                 s.uiModule.fetchLogsBtnLoading(false);
             });
