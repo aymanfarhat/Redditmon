@@ -89,12 +89,16 @@ var UIModule = function(window,$)
             s.fetchLogsBtn.addClass("disabled");
             s.fetchLogsBtn_icon.addClass("icon-spin");
             s.fetchLogsBtn_text.text("Fetching...");
+            s.date_from.prop('disabled',true);
+            s.date_to.prop('disabled',true);
         }
         else
         {
             s.fetchLogsBtn.removeClass("disabled");
             s.fetchLogsBtn_icon.removeClass("icon-spin");
             s.fetchLogsBtn_text.text("Fetch");
+            s.date_from.prop('disabled',false);
+            s.date_to.prop('disabled',false);
         }
     };
 

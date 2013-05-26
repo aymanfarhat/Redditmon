@@ -59,8 +59,8 @@ var DataModule = (function(window, $)
                     UIModule.msgBox("Oh snap!","No results were returned, review your input and try again.");
                     logs_projection
                 }
+                s.uiModule.fetchLogsBtnLoading(false);
             });
-            request.always(s.uiModule.fetchLogsBtnLoading(false));
         }
     };
     
