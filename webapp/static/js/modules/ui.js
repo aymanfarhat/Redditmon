@@ -69,12 +69,7 @@ var UIModule = function(window,$)
                 var start = s.date_from.attr('data-val');
                 var end = s.date_to.attr('data-val');
                 
-                var logs = DataModule.requestLogs(subreddit,start,end);
-                
-                if(logs.length > 0)
-                    s.plotModule.plot(logs);
-                else
-                    msgBox("Oh snap!","No results were returned, review your input and try again.");    
+                DataModule.requestLogs(subreddit,start,end);
             }
         });
 

@@ -18,12 +18,8 @@ var DataModule = (function(window, $)
 
     var requestLogs = function(subreddit,from,to)
     {
-        var logs = [];
 
-        if(subreddit !== logCache.subreddit ||
-        from !== logCache.from ||
-        to !== logCache.to ||
-        logCache.logs.length == 0)
+        if(fireRequest())
         {
             logCache.from = from;
             logCache.to = to;
@@ -31,17 +27,18 @@ var DataModule = (function(window, $)
 
             var request = $.ajax({
                 type: "GET",
-                async:false,
+                async:true,
                 url: window.location.protocol+'//'+window.location.host+"/logs",
                 data: _.template("subreddit=<%=sub%>&start=<%=st%>&end=<%=en%>",{sub:subreddit,st:from,en:to}),
                 beforeSend: s.uiModule.fetchLogsBtnLoading(true),
             });
             
-            request.done(function(reply){
-                if(reply.status === "success" && 
-                    (typeof reply.data.logs !== "undefined" && reply.data.logs.length > 0))
+            request.done(function(reply)
+            {
+                if(reply.status === "success"&&(typeof reply.data.logs !== "undefined" && reply.data.logs.length > 0))
                 {
-                    var logObjects = _.map(reply.data.logs,function(str){
+                    var logObjects = _.map(reply.data.logs,function(str)
+                    {
                         var logobj = $.parseJSON(str);
                         return {
                             readers: logobj.readers,
@@ -50,16 +47,21 @@ var DataModule = (function(window, $)
                             day: logobj.time.split("T")[0]
                         };
                     });
+                    
                     logs = (from === to)?logObjects:reduceLogs(logObjects);
                     logCache.logs = logs;
+
+                    PlotModule.plot(logCache.logs);
                 }
                 else
+                {
                     logCache.logs = (logCache.logs.length > 0)?logCache.logs:[];
+                    UIModule.msgBox("Oh snap!","No results were returned, review your input and try again.");
+                    logs_projection
+                }
             });
-            
             request.always(s.uiModule.fetchLogsBtnLoading(false));
         }
-        return logs;
     };
     
     var datalogAt = function(index)
@@ -67,6 +69,18 @@ var DataModule = (function(window, $)
         return logCache.logs[index];
     };
 
+    /* Check if a request should be fired or not,
+     * only true condition is if input has changed 
+     * or last request was empty.
+     * */
+    var fireRequest = function()
+    {
+        return (subreddit !== logCache.subreddit ||
+        from !== logCache.from ||
+        to !== logCache.to ||
+        logCache.logs.length == 0);
+    };
+    
     /* Reduces the collection of logs into smaller one based by 
      * merging repetitive date(day) data into single element */
     var reduceLogs = function(logs)
