@@ -50,9 +50,8 @@ def create_doc(subreddit):
         'readers': data[u'data']['accounts_active']
     } 
     
-queue = get_queue()
-
 def process_queue():
+    queue = get_queue()
     for sub in queue:
         log('redditmon',sub,create_doc(sub))
         print sub
