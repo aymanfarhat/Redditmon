@@ -44,7 +44,6 @@ def process_queue():
     queue = get_queue()
     for sub in queue:
         log('redditmon',sub,create_doc(sub))
-        print sub
         time.sleep(10)
 
 # If a crontab is not already set, set it and carry on
