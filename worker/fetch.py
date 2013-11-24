@@ -1,22 +1,12 @@
+#!/usr/bin/env python
 import urllib2
 import json
 import pymongo
 from pymongo import MongoClient
-from threading import Thread
 from decorators import retry
 import time
 from datetime import datetime
-
-class MonitorThread(Thread):
-    def __init__(self,delay,action):
-        self.stopped = False
-        self.delay = delay
-        self.action = action
-        Thread.__init__(self)   
-    def run(self):
-        while not self.stopped:
-            self.action()
-            time.sleep(self.delay)
+from crontab import CronTab
 
 # Get the list of subreddits from file
 def get_queue():
@@ -57,6 +47,15 @@ def process_queue():
         print sub
         time.sleep(10)
 
-# Create a thread with sleep delay of 10 minutes
-process = MonitorThread(600,process_queue)
-process.start()
+# If a crontab is not already set, set it and carry on
+cmd = '/home/ayman/projects/Redditmon/worker/fetch.sh'
+cron = CronTab()
+
+if len(cron.find_command(cmd)) == 0:
+    job = cron.new(command = cmd)
+    job.minute.every(10)
+
+    cron.write()
+
+# Fetch and log the data for the subreddits
+process_queue()
